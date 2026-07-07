@@ -126,6 +126,69 @@ else if (url.startsWith("/user/") && method=="GET"){
 
     res.end(JSON.stringify(user))}
 
+    else if(url=="/create" && method=="POST"){
+        
+        let body="";
+        req.on("data",(chunk)=>{
+            body+=chunk;
+    })
+req.on("end",()=>{
+const data=JSON.parse(body);
+const newUser={
+id: data.id,
+name: data.name,
+email: data.email
+}
+
+userdata.push(newUser);
+
+})
+
+res.statusCode=201;
+res.end("user created successfully");
+
+}
+
+else if(url.startsWith("/delete/") && method=="DELETE")
+{
+const id=url.split("/")[2];
+const userIndex=userdata.findIndex((u)=>u.id==id);
+if(userIndex==-1)
+    {return res.end("user not found");}
+
+    userdata.splice(userIndex,1);
+            res.end("user deleted successfully");
+
+    }
+
+else if(url.startsWith("/edit/") && method=="PUT"){
+
+const id= url.split("/")[2];
+const userIndex=userdata.findIndex((u)=>u.id==id);
+if(userIndex==-1)
+{
+return res.end("user not found")
+
+}
+let body="";
+req.on("data",(chunk)=>{
+
+    body=body+chunk;
+
+})
+req.on("end",()=>{
+
+    const newdata=JSON.parse(body);
+    userdata[userIndex]={
+id,
+name: newdata.name,
+email:newdata.email
+
+    }
+})
+res.end("user updated successfully");
+}
+
 else
     {
 res.statusCode=404;
@@ -138,5 +201,6 @@ server.listen(3001,()=>{
 
     console.log("server is running on 3001")
 })
+
 
 
