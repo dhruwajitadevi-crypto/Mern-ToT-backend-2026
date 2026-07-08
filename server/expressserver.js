@@ -75,7 +75,7 @@ app.listen(port,()=>{
 console.log(`server is running on port ${port}`)
 
 })*/
-import express from "express"
+/*import express from "express"
 import dotenv from "dotenv";
 dotenv.config();
 const port=process.env.PORT|| 3002;
@@ -123,7 +123,81 @@ app.post("/create",(req,res)=>{
     catch(err){
         console.error("Error:",err.message)
     }
+})*/
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors"
+dotenv.config();
+const port=process.env.PORT|| 3002;
+const app=express();
+const userdata=[{
+    id:1,
+    name:" Divya Verma",
+    email: "divya@gmail.com"
+},
+{
+     id:2,
+    name:" saurabh Verma",
+    email: "saurabh@gmail.com"
+
+
+}]
+app.use(cors());
+app.use(express.json());//middleware
+
+
+//app.use(express.json());
+app.get("/",(req,res)=>{
+        res.status(200).json({
+      message: "Welcome User"  
+    })
 })
+app.get("/users",(req,res)=>{
+    try{
+        res.status(200).json({message: "data received",userdata})
+    }
+    catch(err)
+    {
+        console.error("Error:",err.message)
+    }
+})
+
+app.post("/create",(req,res)=>{
+    try{
+        const {name,email}=req.body;
+        const newUser={
+            id: userdata.length+1,
+            name,
+            email
+        }
+
+        userdata.push(newUser);
+        res.status(201).json({message: "user created successfully",newUser})
+    }
+    catch(err){
+        console.error("Error:",err.message)
+    }
+})
+
+app.delete("/delete/", (req,res)=>
+{
+     const { id } = req.params;
+
+    res.json({
+        message: `User with ID ${id} deleted successfully`
+    })
+})
+/*const id=url.split("/")[2];
+const userIndex=userdata.findIndex((u)=>u.id==id);
+if(userIndex==-1)
+    {return res.end("user not found");}
+
+    userdata.splice(userIndex,1);
+            res.end("user deleted successfully");
+
+    }*/
+
+
 app.listen(port,()=>{
     console.log(`server is running on port ${port}`)
 

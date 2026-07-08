@@ -1,47 +1,56 @@
-function register(cb){
-    setTimeout(()=>{
+function register(){
+    return new Promise((resolve, reject) => {
+      setTimeout(()=>{
      console.log("Register Here");
-     cb();
-     console.log("waiting in register");
-    },8000)
+    },8000)   
+    })
+   
     
 }
-function sendEmail(cb){
-    setTimeout(()=>{
+function sendEmail(){
+    return new Promise(() => {
+      setTimeout(()=>{
       console.log("Send Email");
-      cb();
-    },2000)
+    },2000)   
+    })
+   
     
 }
-function login(cb){
-    setTimeout(()=>{
+function login(){
+    return new Promise((resolve, reject) => {
+       setTimeout(()=>{
        console.log("Login Here");
-       cb();
-    },1500)
+    },1500)  
+    })
+   
   
 }
-function getData(cb){
-    setTimeout(()=>{
+function getData(){
+    return new Promise((resolve, reject) => {
+       setTimeout(()=>{
 console.log("fetch data");
-cb();
-    },4000)
+
+    },4000)  
+    })
+   
     
 }
 function displayData(){
-    setTimeout(()=>{
+    return new Promise((resolve, reject) => {
+     setTimeout(()=>{
     console.log("Display Data");
-    },3000)
+    },3000)    
+    })
+   
     
 }
 
-//callback hell
-register(()=>{
-       sendEmail(()=>{
-            login(()=>{
-                getData(()=>{
-                    displayData();
-                })
-            });
-       });
-});
-console.log("call other application");
+register().then(sendEmail)
+          .then(login)
+          .then(getData)
+          .then(displayData)
+          .catch((err)=>{
+            console.log("Error",err.message)
+          })
+
+ console.log("call other Application");
